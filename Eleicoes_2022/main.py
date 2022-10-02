@@ -80,7 +80,8 @@ def main():
         df_eleicao = df_eleicao.sort_values('Porcentagem', ascending=False)
         if titulo_mensagem == '*Dep. Estadual SP*' or titulo_mensagem == '*Dep. Federal*':
             df_eleicao = df_eleicao.head(10)    
-        df_eleicao = df_eleicao.head(5)
+        else:
+            df_eleicao = df_eleicao.head(5)
         print(df_eleicao)
 
         total = df_eleicao['Votos'].sum()
