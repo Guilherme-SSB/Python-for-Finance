@@ -22,65 +22,81 @@ def main():
     HORA_ATUAL = str(HORA_ATUAL.strftime("%d/%m/%Y %Hh%M"))
     
     # Presidente - Brasil Consolidado
-    URL = 'https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/br/br-c0001-e000544-r.json'
+    # URL = 
 
     # Senador SP
     # URL = 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0005-e000546-r.json'
 
     # Governador SP
-    # URL = 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0003-e000546-r.json'
+    # URL = 
 
     # Deputado Federal SP
-    # URL = 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0006-e000546-r.json'
+    # URL = 
 
     # Deputado Estadual SP
-    # URL = 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0007-e000546-r.json'
+    # URL = 
 
-    response = make_request(URL)
+    dict_URLs = {
+        '*Presidente*': 'https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/br/br-c0001-e000544-r.json',
+        '*Senador*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0005-e000546-r.json',
+        '*Governador SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0003-e000546-r.json',
+        '*Dep. Federal*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0006-e000546-r.json',
+        '*Dep. Estadual SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0007-e000546-r.json'
+    }
+    mensagem = ''
 
-    json_data = json.loads(response)
-    canditados = []
-    partidos = []
-    votos = []
-    porcentagem = []
+    for item in dict_URLs.items():
 
-    seções_finalizadas = str(json_data['pst']).replace(',', '.') + '%'
+        URL = item[1]
+        titulo_mensagem = item[0]
+        response = make_request(URL)
 
-    for infos in json_data['cand']:
-        if str(infos['nm']).startswith('FELIPE'):
-            canditados.append('FELIPE D\'AVILA')
-            votos.append(infos['vap'])
-            partidos.append(infos['cc'])
-            porcentagem.append(infos['pvap'])  
+        json_data = json.loads(response)
+        canditados = []
+        partidos = []
+        votos = []
+        porcentagem = []
 
-        else:
-            canditados.append(infos['nm'])
-            votos.append(infos['vap'])
-            partidos.append(infos['cc'])
-            porcentagem.append(infos['pvap'])
+        seções_finalizadas = str(json_data['pst']).replace(',', '.') + '%'
 
-    # df_eleicao = pd.DataFrame(list(zip(canditados, partidos, votos, porcentagem)), columns = ['Candidato', 'Partido', 'Votos', 'Porcentagem'])
-    df_eleicao = pd.DataFrame(list(zip(canditados, votos, porcentagem)), columns = ['Candidato', 'Votos', 'Porcentagem'])
-    df_eleicao['Votos'] = df_eleicao['Votos'].astype(int)
-    df_eleicao['Porcentagem'] = df_eleicao['Porcentagem'].apply(lambda x: x.replace(',', '.'))
-    df_eleicao['Porcentagem'] = df_eleicao['Porcentagem'].astype(float)
-    df_eleicao = df_eleicao.sort_values('Porcentagem', ascending=False)
-    print(df_eleicao.head(10))
+        for infos in json_data['cand']:
+            if str(infos['nm']).startswith('FELIPE'):
+                canditados.append('FELIPE D\'AVILA')
+                votos.append(infos['vap'])
+                partidos.append(infos['cc'])
+                porcentagem.append(infos['pvap'])  
 
-    total = df_eleicao['Votos'].sum()
-    print(f'\nTotal de votos: {total}')
-    print(f'Seções finalizadas: {seções_finalizadas}')
-    
-    # Mandar no WhatsApp
-    mensagem = HORA_ATUAL + '\n\n'
-    for index, row in df_eleicao.iterrows():
-        mensagem_aux = f'{row["Candidato"]} - {row["Porcentagem"]}%\n'
-        mensagem += mensagem_aux
+            else:
+                canditados.append(infos['nm'])
+                votos.append(infos['vap'])
+                partidos.append(infos['cc'])
+                porcentagem.append(infos['pvap'])
 
-    mensagem += f'\nSeções finalizadas: {seções_finalizadas}'
+        # df_eleicao = pd.DataFrame(list(zip(canditados, partidos, votos, porcentagem)), columns = ['Candidato', 'Partido', 'Votos', 'Porcentagem'])
+        df_eleicao = pd.DataFrame(list(zip(canditados, votos, porcentagem)), columns = ['Candidato', 'Votos', 'Porcentagem'])
+        df_eleicao['Votos'] = df_eleicao['Votos'].astype(int)
+        df_eleicao['Porcentagem'] = df_eleicao['Porcentagem'].apply(lambda x: x.replace(',', '.'))
+        df_eleicao['Porcentagem'] = df_eleicao['Porcentagem'].astype(float)
+        df_eleicao = df_eleicao.sort_values('Porcentagem', ascending=False)
+        if titulo_mensagem == '*Dep. Estadual SP*' or titulo_mensagem == '*Dep. Federal*':
+            df_eleicao = df_eleicao.head(10)    
+        df_eleicao = df_eleicao.head(5)
+        print(df_eleicao)
+
+        total = df_eleicao['Votos'].sum()
+        print(f'\nTotal de votos: {total}')
+        print(f'Seções finalizadas: {seções_finalizadas}')
+        
+        # Mandar no WhatsApp
+        mensagem += titulo_mensagem + ' - ' + HORA_ATUAL + '\n\n'
+        for index, row in df_eleicao.iterrows():
+            mensagem_aux = f'{row["Candidato"]} - {row["Porcentagem"]}%\n'
+            mensagem += mensagem_aux
+
+        mensagem += f'\nSeções finalizadas: {seções_finalizadas}\n\n'
 
     messenger = WhatsApp()
-    messenger.find_by_username('Eu mesmo')
+    messenger.find_by_username('Apuração Presidente')
     time.sleep(5)
     messenger.send_message(mensagem)
     time.sleep(5)
