@@ -96,6 +96,8 @@ def main():
 
         mensagem += f'\nSeções finalizadas: {seções_finalizadas}\n\n'
 
+        time.sleep(5)
+
     messenger = WhatsApp()
     messenger.find_by_username('Apuração Presidente')
     time.sleep(5)
