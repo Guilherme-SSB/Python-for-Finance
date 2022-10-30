@@ -37,11 +37,13 @@ def main():
     # URL = 
 
     dict_URLs = {
-        '*Presidente*': 'https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/br/br-c0001-e000544-r.json',
-        '*Senador*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0005-e000546-r.json',
-        '*Governador SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0003-e000546-r.json',
-        '*Dep. Federal*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0006-e000546-r.json',
-        '*Dep. Estadual SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0007-e000546-r.json'
+        # '*Presidente*': 'https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/br/br-c0001-e000544-r.json',
+        '*Presidente*': 'https://resultados.tse.jus.br/oficial/ele2022/545/dados-simplificados/br/br-c0001-e000545-r.json',
+        # '*Senador*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0005-e000546-r.json',
+        # '*Governador SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0003-e000546-r.json',
+        '*Governador SP*': 'https://resultados.tse.jus.br/oficial/ele2022/547/dados-simplificados/sp/sp-c0003-e000547-r.json',
+        # '*Dep. Federal*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0006-e000546-r.json',
+        # '*Dep. Estadual SP*': 'https://resultados.tse.jus.br/oficial/ele2022/546/dados-simplificados/sp/sp-c0007-e000546-r.json'
     }
     mensagem = ''
 
@@ -97,9 +99,9 @@ def main():
         mensagem += f'\nSeções finalizadas: {seções_finalizadas}\n\n'
 
         time.sleep(5)
-
+    
     messenger = WhatsApp()
-    messenger.find_by_username('Apuração Presidente')
+    messenger.find_by_username('Apuração Eleições 2022')
     time.sleep(5)
     messenger.send_message(mensagem)
     time.sleep(5)
