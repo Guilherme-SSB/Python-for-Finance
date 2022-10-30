@@ -101,7 +101,7 @@ def main():
         time.sleep(5)
     
     messenger = WhatsApp()
-    messenger.find_by_username('Apuração Eleições 2022')
+    messenger.find_by_username('Apuração')
     time.sleep(5)
     messenger.send_message(mensagem)
     time.sleep(5)
