@@ -1,0 +1,1 @@
+print('Opa! Deu certo via pipeline!')
