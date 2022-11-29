@@ -1,1 +1,1 @@
-print('Opa! Deu certo via pipeline!')
+print('Opa! Deu certo via pipeline! - Atualização')

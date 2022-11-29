@@ -1,13 +1,14 @@
-FROM python:3.8
+# Dockerfile for running a python script
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Use the official python image
+FROM python:3.8
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Make port 80 available
-# Define environment variable
+# Copy the current directory contents into the container at /app
+COPY . /app
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
+
